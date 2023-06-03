@@ -89,7 +89,7 @@ const deleteMovieById = async (req, res, next) => {
     if (userId !== movie.owner.toString()) {
       throw new ForbiddenError(DELETE_FORBIDDEN_ERROR);
     }
-    await Movie.deleteOne({ _id: movieId });
+    await Movie.deleteOne();
     res.send({ message: FILM_DELETED });
   } catch (err) {
     if (err instanceof CastError) {
