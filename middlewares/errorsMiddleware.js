@@ -4,7 +4,7 @@ const { INTERNAL_SERVER_ERROR_500, SERVER_ERROR } = require('../utils/appConstan
 // Мидлвэр для обработки ошибок
 const errorMiddleware = (err, req, res, next) => {
   // Если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
+  const { statusCode = INTERNAL_SERVER_ERROR_500, message } = err;
   // Отправляем статус и сообщение об ошибке в ответе
   // Если статус равен 500, отправляем общее сообщение об ошибке сервера
   // В противном случае отправляем сообщение из объекта ошибки
