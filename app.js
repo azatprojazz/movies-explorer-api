@@ -13,12 +13,12 @@ const router = require('./routes/index'); // Подключаем роуты
 
 // Подключаем конфигурационные параметры
 const {
-  NODE_ENV, PORT, DB, DB_DEV,
+  PORT, DB,
 } = require('./utils/appConfig');
 
 const app = express(); // Создаем экземпляр Express-приложения
 // Подключаемся к БД
-mongoose.connect(NODE_ENV === 'production' ? DB : DB_DEV, {
+mongoose.connect(DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
