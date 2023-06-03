@@ -1,0 +1,36 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+.pnp.js
+
+# Optional npm cache directory
+.npm
+
+# build
+/dist
+/build
+
+# testing
+/coverage
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment configurations
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE settings
+.idea
+.vscode
+
+# OS generated files
+.DS_Store
