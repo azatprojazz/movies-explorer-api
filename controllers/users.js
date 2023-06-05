@@ -112,7 +112,7 @@ const updateUserData = async (req, res, next) => {
     }
     res.send(user);
   } catch (err) {
-    if (err.code === 11000) {
+    if (err.code === DUPLICATION_11000) {
       next(new ConflictError(USER_EXISTS_ERROR));
       return;
     }
