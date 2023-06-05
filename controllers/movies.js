@@ -32,36 +32,9 @@ const getMovies = async (req, res, next) => {
 
 // Обработчик создания фильма
 const createMovie = async (req, res, next) => {
-  const {
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-  } = req.body;
-
+  const owner = req.user._id;
   try {
-    const userId = req.user._id;
-    const movie = await Movie.create({
-      country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailerLink,
-      thumbnail,
-      movieId,
-      nameRU,
-      nameEN,
-      owner: userId,
-    });
+    const movie = await Movie.create({ ...req.body, owner });
     const populatedMovie = await movie.populate('owner');
     res.status(CREATED_201).send(populatedMovie);
   } catch (err) {
