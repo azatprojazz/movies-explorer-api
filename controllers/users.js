@@ -43,13 +43,29 @@ const getCurrentUserInfo = async (req, res, next) => {
   }
 };
 
+// Функция установки JWT
+const setJwt = (res, user) => {
+  const token = jwt.sign(
+    { _id: user._id },
+    NODE_ENV === 'production' ? JWT_SECRET : DEV_JWT,
+    { expiresIn: '7d' },
+  );
+
+  res.cookie('jwt', token, {
+    maxAge: 3600000 * 24 * 7,
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+  });
+};
+
 // Обработчик создания пользователя
 const createUser = async (req, res, next) => {
   const { email, password, name } = req.body;
-
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ email, password: hashedPassword, name });
+    setJwt(res, user); // устанавливаем JWT
     const userResponse = user.toObject();
     delete userResponse.password;
     res.status(CREATED_201).send({ data: userResponse });
@@ -72,17 +88,10 @@ const createUser = async (req, res, next) => {
 // Обработчик входа в систему
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findUserByCredentials(email, password);
-    const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : DEV_JWT, { expiresIn: '7d' });
-    res
-      .cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-        sameSite: true,
-      })
-      .send({ message: SIGNIN_COMPLETED });
+    setJwt(res, user); // устанавливаем JWT
+    res.send({ message: SIGNIN_COMPLETED, data: user });
   } catch (err) {
     next(err);
   }
@@ -92,12 +101,10 @@ const login = async (req, res, next) => {
 const logout = (req, res) => {
   res.clearCookie('jwt').send({ message: SIGNOUT_COMPLETED });
 };
-
 // Обработчик обновления данных пользователя
 const updateUserData = async (req, res, next) => {
   const userId = req.user._id;
   const { email, name } = req.body;
-
   try {
     const user = await User.findByIdAndUpdate(
       userId,
