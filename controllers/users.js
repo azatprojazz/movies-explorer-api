@@ -99,7 +99,7 @@ const login = async (req, res, next) => {
 
 // Обработчик выхода из системы
 const logout = (req, res) => {
-  res.clearCookie('jwt').send({ message: SIGNOUT_COMPLETED });
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true }).send({ message: SIGNOUT_COMPLETED });
 };
 // Обработчик обновления данных пользователя
 const updateUserData = async (req, res, next) => {
