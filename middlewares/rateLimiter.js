@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 // max - максимальное количество запросов, разрешенных в течение окна (здесь - 100)
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
-  max: 100,
+  max: 1000,
 });
 
 // Экспортируем rateLimiter для дальнейшего использования в приложении
